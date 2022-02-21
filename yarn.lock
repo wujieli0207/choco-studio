@@ -3543,7 +3543,7 @@ vfile@^4.0.0:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
-vite-plugin-style-import@1.4.1:
+vite-plugin-style-import@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/vite-plugin-style-import/-/vite-plugin-style-import-1.4.1.tgz#47a66920cce5484640f2faacd73190aac0b91b94"
   integrity sha512-lJCRvm7+So0hHdnSJiJPg9gD5mxtL6YY0jmhEph+k7ArpsyvqOh6han2kG5htbWWDZxHkUN9d1BuTFL//yCLLQ==
