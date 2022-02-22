@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import { setupVant } from "/@/plugins/vant";
+import setupVant from "/@/plugins/vant";
 
 import { setupRouter } from "/@/router";
 

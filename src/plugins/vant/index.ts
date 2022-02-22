@@ -12,6 +12,6 @@ function useVant(app: App) {
   });
 }
 
-export function setupVant(app: App<Element>) {
+export default function setupVant(app: App<Element>) {
   app.use(useVant);
 }

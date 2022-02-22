@@ -1,6 +1,8 @@
 <template>
-  <router-view />
-  <cho-tabbar />
+  <div>
+    <router-view />
+    <cho-tabbar />
+  </div>
 </template>
 
 <script lang="ts" setup>

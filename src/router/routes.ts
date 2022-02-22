@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from "vue-router";
 
-export const routes: RouteRecordRaw[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "home",
@@ -26,3 +26,5 @@ export const routes: RouteRecordRaw[] = [
     },
   },
 ];
+
+export default routes;
