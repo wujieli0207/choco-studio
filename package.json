@@ -9,6 +9,7 @@
     "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/"
   },
   "dependencies": {
+    "@iconify/iconify": "^2.1.2",
     "consola": "^2.15.3",
     "stylelint": "13.13.1",
     "vant": "^3.4.5",
@@ -16,6 +17,7 @@
     "vue-router": "^4.0.12"
   },
   "devDependencies": {
+    "@iconify/json": "^2.1.4",
     "@types/node": "^17.0.18",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
@@ -35,6 +37,7 @@
     "stylelint-scss": "^3.21.0",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
+    "vite-plugin-purge-icons": "^0.7.0",
     "vite-plugin-style-import": "^1.4.1",
     "vue-tsc": "^0.29.8"
   }

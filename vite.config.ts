@@ -2,6 +2,7 @@ import { UserConfigExport } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import styleImport, { VantResolve } from "vite-plugin-style-import";
+import PurgeIcons from "vite-plugin-purge-icons";
 
 const pathResolve = (dir: string): any => {
   return resolve(__dirname, ".", dir);
@@ -19,6 +20,7 @@ export default (): UserConfigExport => {
       styleImport({
         resolves: [VantResolve()],
       }),
+      PurgeIcons(),
     ],
     // 别名设置
     resolve: {
