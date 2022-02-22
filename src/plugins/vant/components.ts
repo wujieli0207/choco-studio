@@ -1,5 +1,5 @@
-import { Button, Tabbar, TabbarItem, Toast } from "vant";
+import { Button, Card, NavBar, Tabbar, TabbarItem, Toast } from "vant";
 
-export const components = [Button, Tabbar, TabbarItem];
+export const components = [Button, Tabbar, TabbarItem, Card, NavBar];
 
 export const plugins = [Toast];
