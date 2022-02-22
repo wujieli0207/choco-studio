@@ -1,12 +1,12 @@
-import { RouteRecordRaw } from "vue-router";
+import type { AppRouteRecordRaw } from "./types";
 
-const routes: RouteRecordRaw[] = [
+const routes: AppRouteRecordRaw[] = [
   {
     path: "/",
     name: "home",
     component: () => import("../views/home/Home.vue"),
     meta: {
-      name: "主页",
+      title: "主页",
     },
   },
   {
@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
     name: "appoint",
     component: () => import("../views/appoint/Appoint.vue"),
     meta: {
-      name: "课程预约",
+      title: "课程预约",
     },
   },
   {
@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
     name: "mine",
     component: () => import("../views/mine/Mine.vue"),
     meta: {
-      name: "我的",
+      title: "我的",
     },
   },
 ];
