@@ -1,9 +1,5 @@
-import { Button, Toast } from "vant";
 import { App, Component } from "vue";
-
-const components = [Button];
-
-const plugins = [Toast];
+import { components, plugins } from "./components";
 
 function useVant(app: App) {
   components.forEach((component: Component) => {
