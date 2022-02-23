@@ -1,7 +1,7 @@
 import { UserConfigExport } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
-import { createStyleImportPlugin, NutuiResolve } from "vite-plugin-style-import";
+import { createStyleImportPlugin, VantResolve, NutuiResolve } from "vite-plugin-style-import";
 import PurgeIcons from "vite-plugin-purge-icons";
 
 const pathResolve = (dir: string): any => {
@@ -17,7 +17,7 @@ export default (): UserConfigExport => {
     plugins: [
       vue(),
       createStyleImportPlugin({
-        resolves: [NutuiResolve()],
+        resolves: [VantResolve(), NutuiResolve()],
       }),
       PurgeIcons(),
     ],
