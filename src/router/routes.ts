@@ -4,7 +4,7 @@ const routes: AppRouteRecordRaw[] = [
   {
     path: "/",
     name: "home",
-    component: () => import("../views/home/Home.vue"),
+    component: () => import("/@/views/home/Home.vue"),
     meta: {
       title: "主页",
     },
@@ -12,7 +12,15 @@ const routes: AppRouteRecordRaw[] = [
   {
     path: "/appoint",
     name: "appoint",
-    component: () => import("../views/appoint/Appoint.vue"),
+    component: () => import("/@/views/appoint/Appoint.vue"),
+    meta: {
+      title: "课程列表",
+    },
+  },
+  {
+    path: "/appointDetail",
+    name: "appointDetail",
+    component: () => import("/@/views/appoint/components/AppointDetail.vue"),
     meta: {
       title: "课程预约",
     },
@@ -20,7 +28,7 @@ const routes: AppRouteRecordRaw[] = [
   {
     path: "/mine",
     name: "mine",
-    component: () => import("../views/mine/Mine.vue"),
+    component: () => import("/@/views/mine/Mine.vue"),
     meta: {
       title: "我的",
     },
