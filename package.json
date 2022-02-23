@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@iconify/iconify": "^2.1.2",
-    "@nutui/nutui": "^3.1.16",
     "consola": "^2.15.3",
     "stylelint": "13.13.1",
     "vant": "^3.4.5",

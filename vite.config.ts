@@ -1,7 +1,7 @@
 import { UserConfigExport } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
-import { createStyleImportPlugin, VantResolve, NutuiResolve } from "vite-plugin-style-import";
+import { createStyleImportPlugin, VantResolve } from "vite-plugin-style-import";
 import PurgeIcons from "vite-plugin-purge-icons";
 
 const pathResolve = (dir: string): any => {
@@ -17,18 +17,10 @@ export default (): UserConfigExport => {
     plugins: [
       vue(),
       createStyleImportPlugin({
-        resolves: [VantResolve(), NutuiResolve()],
+        resolves: [VantResolve()],
       }),
       PurgeIcons(),
     ],
-    css: {
-      preprocessorOptions: {
-        scss: {
-          // 配置 nutui 全局 scss 变量
-          additionalData: `@import "@nutui/nutui/dist/styles/variables.scss";`,
-        },
-      },
-    },
     // 别名设置
     resolve: {
       alias,
