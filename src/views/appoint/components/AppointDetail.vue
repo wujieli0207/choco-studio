@@ -55,6 +55,7 @@
 
 <script lang="ts" setup>
   import { ref } from "vue";
+  import dayjs from "dayjs";
   import ChoDateTimePicker from "/@/components/ChoDateTimePicker.vue";
   import { getCurrentDate } from "/@/utils/dateUtil";
   import appointSetting from "/@/settings/appointSetting";
@@ -74,11 +75,19 @@
    * @description 预约时间范围设置
    */
   function appointTimeFilter(type: string, values: string[]): string[] {
+    const currentDay = dayjs().format("YYYY-MM-D");
+
     if (type === "hour") {
-      // ! todo 超过当天的最晚结束时间小时则不展示
-      return values.slice(Number(START_TIME_HOUR), Number(END_TIME_HOUR) + 1).filter((value) => {
-        return Number(value) > new Date().getHours();
-      });
+      // 超过最晚结束时间小时则不展示
+      let filterHour = values.slice(Number(START_TIME_HOUR), Number(END_TIME_HOUR) + 1);
+
+      // 当天已经过去的小时不可以预约
+      if (currentDay === appointDate.value) {
+        filterHour.filter((value) => {
+          return Number(value) > new Date().getHours();
+        });
+      }
+      return filterHour;
     }
 
     if (type === "minute") {

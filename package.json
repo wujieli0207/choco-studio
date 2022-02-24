@@ -13,6 +13,7 @@
   "dependencies": {
     "@iconify/iconify": "^2.1.2",
     "consola": "^2.15.3",
+    "dayjs": "^1.10.7",
     "stylelint": "13.13.1",
     "vant": "^3.4.5",
     "vue": "^3.2.25",
