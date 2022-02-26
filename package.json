@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "@iconify/iconify": "^2.1.2",
+    "@types/qs": "^6.9.7",
+    "axios": "^0.26.0",
     "consola": "^2.15.3",
     "dayjs": "^1.10.7",
+    "lodash-es": "^4.17.21",
+    "qs": "^6.10.3",
     "stylelint": "13.13.1",
     "vant": "^3.4.5",
     "vue": "^3.2.25",
@@ -21,6 +25,7 @@
   },
   "devDependencies": {
     "@iconify/json": "^2.1.4",
+    "@types/lodash-es": "^4.17.6",
     "@types/node": "^17.0.18",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
@@ -33,6 +38,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-vue": "^8.4.1",
+    "mockjs": "^1.1.0",
     "prettier": "^2.5.1",
     "sass": "^1.49.8",
     "stylelint-config-prettier": "^8.0.2",
@@ -42,6 +48,7 @@
     "stylelint-scss": "^3.21.0",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
+    "vite-plugin-mock": "^2.9.6",
     "vite-plugin-purge-icons": "^0.7.0",
     "vite-plugin-style-import": "^2.0.0",
     "vue-tsc": "^0.29.8"
