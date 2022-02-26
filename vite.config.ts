@@ -1,8 +1,9 @@
-import { UserConfigExport } from "vite";
+import { ConfigEnv, UserConfigExport } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import { createStyleImportPlugin, VantResolve } from "vite-plugin-style-import";
 import PurgeIcons from "vite-plugin-purge-icons";
+import { viteMockServe } from "vite-plugin-mock";
 
 const pathResolve = (dir: string): any => {
   return resolve(__dirname, ".", dir);
@@ -13,7 +14,7 @@ const alias: Record<string, string> = {
   "/#": pathResolve("types"),
 };
 
-export default (): UserConfigExport => {
+export default ({ command }: ConfigEnv): UserConfigExport => {
   return {
     plugins: [
       vue(),
@@ -21,6 +22,10 @@ export default (): UserConfigExport => {
         resolves: [VantResolve()],
       }),
       PurgeIcons(),
+      viteMockServe({
+        mockPath: "mock", // mock 文件目录，默认为根目录的 mock 目录
+        localEnabled: command === "serve",
+      }),
     ],
     // 别名设置
     resolve: {
