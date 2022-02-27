@@ -161,7 +161,9 @@ export class ChocoAxios {
             } catch (error) {
               reject(error || new Error("request error!"));
             }
+            return;
           }
+          resolve(res as unknown as Promise<T>);
         })
         .catch((e: Error | AxiosError) => {
           if (requestCatchHook && isFunction(requestCatchHook)) {

@@ -1,8 +1,8 @@
-import { cloneDeep } from "lodash-es";
+import { clone, cloneDeep } from "lodash-es";
 import { deepMerge, setObjToUrlParams } from "/@/utils";
 import { ChocoAxios } from "./Axios";
 import { AxiosTransform, CreateAxiosOptions } from "./axiosTransform";
-import { ContentTypeEnum, RequestEnum } from "/@/enums/httpEnum";
+import { ContentTypeEnum, RequestEnum, ResultEnum } from "/@/enums/httpEnum";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { RequestOptions, Result } from "/#/axios";
 import { useGlobSetting } from "/@/settings";
@@ -19,7 +19,45 @@ const transform: AxiosTransform = {
    * @param options
    * @description 处理请求数据。如果数据不是预期格式，可直接抛出错误
    */
-  transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {},
+  transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+    const { isTransformResponse, isReturnNativeResponse } = options;
+
+    // 需要获取响应头时使用该属性
+    if (isReturnNativeResponse) {
+      return res;
+    }
+
+    // 不进行数据处理，直接返回数据，用于可能需要直接获取 code，data，message 的场景
+    if (!isTransformResponse) {
+      return res.data;
+    }
+
+    const { data } = res;
+    if (!data) {
+      throw new Error("请求出错，请稍后重试");
+    }
+
+    // code，result，message为 后台统一的字段，在 axios.d.ts 的 Result 定义
+    const { code, result, message } = data;
+
+    const hasSuccess = data && Reflect.has(data, "code") && code === ResultEnum.SUCCESS;
+    if (hasSuccess) {
+      return result;
+    }
+
+    // 可以增加更多定义，在 httpEnum 的 ResultEnum 中增加
+    let timeoutMsg = "";
+    switch (code) {
+      default:
+        if (message) {
+          timeoutMsg = message;
+        }
+    }
+
+    // TODO 错误请求弹窗部分待添加
+
+    throw new Error(timeoutMsg || "请求出错，请稍后重试");
+  },
 
   /**
    *
@@ -47,7 +85,7 @@ const transform: AxiosTransform = {
         config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
       } else {
         // 兼容 restful 风格
-        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
+        config.url = `${config.url}${params}${joinTimestamp(joinTime, true)}`;
         config.params = undefined;
       }
     } else {
@@ -79,7 +117,8 @@ const transform: AxiosTransform = {
     return config;
   },
 
-  // ! TODO 请求拦截器处理
+  // ! TODO 请求携带 Token 功能待添加
+  // ! TODO 响应失败处理函数待添加
 };
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
@@ -90,13 +129,13 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         headers: {
           "Content-Type": ContentTypeEnum.JSON,
         },
-        // ! TODO 数据处理方式
+        transform: clone(transform),
+        // 参考文档：https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
+        authenticationScheme: "",
         // 以下配置项都可以在独立请求覆盖
         requestOptions: {
-          //  TODO 接口地址待调整为配置
-          apiUrl: "/api",
-          //  TODO 接口地址待调整为配置
-          urlPrefix: "/",
+          apiUrl: globSetting.apiUrl,
+          urlPrefix: urlPrefix,
           // 默认忽略重复请求
           ignoreCancelToken: true,
           // 默认将 prefix 添加到 url
@@ -113,8 +152,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           errorMessageMode: "message",
           // 默认加入时间戳
           joinTime: true,
-          // 默认携带 Token
-          withToken: true,
+          // TODO 暂时不携带携带 Token
+          withToken: false,
         },
       },
       opt || {}
