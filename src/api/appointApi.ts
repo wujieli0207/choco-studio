@@ -1,7 +1,7 @@
 import { defHttp } from "/@/utils/http/axios";
 
 enum Api {
-  APPOINT_LIST = "/appoint/getAppointList",
+  APPOINT_LIST = "/api/appoint/findAll",
 }
 
 export const getAppointList = () => {

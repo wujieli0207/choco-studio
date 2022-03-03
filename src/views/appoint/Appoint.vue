@@ -34,11 +34,24 @@
 </template>
 
 <script lang="ts" setup>
+  import { onMounted, ref } from "vue";
   import { useRouter } from "vue-router";
+  import { getAppointList } from "/@/api/appointApi";
 
   const router = useRouter();
 
   const toAppointDetail = () => {
     router.push({ name: "appointDetail" });
   };
+
+  onMounted(async () => {
+    loadAppointList();
+  });
+
+  const appointList = ref([]);
+
+  async function loadAppointList() {
+    const data = await getAppointList();
+    appointList.value = data.list;
+  }
 </script>
