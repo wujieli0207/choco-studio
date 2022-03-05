@@ -1,4 +1,6 @@
-/* ./src/index.css */
+@import "./common.scss";
+@import "./variables.scss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
