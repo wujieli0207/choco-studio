@@ -96,7 +96,7 @@
    * @description 预约时间范围设置
    */
   function appointTimeFilter(type: string, values: string[]): string[] {
-    const currentDay = dayjs().format("YYYY-MM-DD");
+    const currentDay = dayjs().format("YYYY年M月D日");
 
     if (type === "hour") {
       // 超过最晚结束时间小时则不展示
@@ -104,8 +104,8 @@
 
       // 当天已经过去的小时不可以预约
       if (currentDay === appointDate.value) {
-        filterHour.filter((value) => {
-          return Number(value) > new Date().getHours();
+        filterHour = filterHour.filter((value) => {
+          return Number(value) > Number(new Date().getHours());
         });
       }
       return filterHour;
