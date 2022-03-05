@@ -143,6 +143,11 @@
       });
     }
 
+    // 当前时间超过每天预约最晚结束时间，则当天不能预约
+    if (currentDate.get("hour") > Number(END_TIME_HOUR)) {
+      result.shift();
+    }
+
     return result;
   }
 
