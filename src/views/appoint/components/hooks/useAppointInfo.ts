@@ -1,13 +1,17 @@
+import dayjs from "dayjs";
 import { ref } from "vue";
 import appointSetting from "/@/settings/appointSetting";
-import { getCurrentDate } from "/@/utils/dateUtil";
 
 const useAppointInfo = () => {
-  const currentHour = new Date().getHours();
+  const currentDate = dayjs();
 
   // 当前时间超过每天预约最晚结束时间，则当天不能预约
   const appointDate = ref(
-    currentHour < Number(appointSetting.endTimeHour) ? getCurrentDate(0) : getCurrentDate(1)
+    currentDate.get("hour") < Number(appointSetting.endTimeHour)
+      ? currentDate.format("YYYY年M月D日")
+      : dayjs(
+          new Date(currentDate.get("year"), currentDate.get("month"), currentDate.get("date") + 1)
+        ).format("YYYY年M月D日")
   );
   const appointStartTime = ref("");
   const appointEndTime = ref("");

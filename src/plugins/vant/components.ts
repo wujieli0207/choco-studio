@@ -1,9 +1,11 @@
 import {
   Button,
+  Calendar,
   Card,
   CellGroup,
   DatetimePicker,
   Field,
+  Icon,
   NavBar,
   Picker,
   Popup,
@@ -27,6 +29,8 @@ export const components = [
   Picker,
   Popup,
   DatetimePicker,
+  Icon,
+  Calendar,
 ];
 
 export const plugins = [Toast];

@@ -1,19 +1,36 @@
 <template>
   <div>
-    <div class="course-banner">
-      <img src="https://img.yzcdn.cn/vant/ipad.jpeg" alt="课程图片" />
+    <div class="w-full">
+      <img class="" :src="appointDetail?.appointImg" alt="课程图片" />
     </div>
-    <div class="appoint-info">
+
+    <div>
+      <div class="float-right">
+        <van-button @click="calendarShow = true">
+          <van-icon name="notes-o" class="text-gray-500 z-10" size="1.4rem" />
+          <div class="text-xs text-gray-500">选择</div>
+        </van-button>
+        <van-calendar
+          v-model:show="calendarShow"
+          :show-confirm="false"
+          @confirm="choseAppointDate"
+        />
+      </div>
+
       <div>
         <van-tabs
-          v-model:active="tabActive"
+          v-model:active="tabActiveName"
           @click-tab="
-            ({ title }) => {
-              setAppointDate(title);
+            ({ name }) => {
+              setAppointDate(name);
             }
           "
         >
-          <van-tab v-for="item in generateAppointDate()" :index="item" :title="item">
+          <van-tab v-for="item in appointDateRange" :index="item" :name="item.fullDate">
+            <template #title>
+              <div>{{ item.date }}</div>
+              <div class="text-center">{{ item.weekDay }}</div>
+            </template>
             <van-cell-group inset>
               <van-field
                 readonly
@@ -43,29 +60,33 @@
             <van-cell-group inset>
               <van-field v-model="appointRemark" label="备注" placeholder="请输入其他备注信息" />
             </van-cell-group>
-            <van-cell-group inset>
-              <van-button type="primary" block>立即预约</van-button>
-            </van-cell-group>
           </van-tab>
         </van-tabs>
       </div>
+      <van-cell-group inset>
+        <van-button type="primary" block>立即预约</van-button>
+      </van-cell-group>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { onMounted, ref, nextTick } from "vue";
   import dayjs from "dayjs";
   import ChoDateTimePicker from "/@/components/ChoDateTimePicker.vue";
-  import { getCurrentDate } from "/@/utils/dateUtil";
   import appointSetting from "/@/settings/appointSetting";
   import useAppointInfo from "./hooks/useAppointInfo";
+  import { getAppointDetail } from "/@/api/appointApi";
+  import { getQueryVariable } from "/@/utils/cache";
+  import type { AppointDetail, AppointDateReturn } from "../types";
 
   const START_TIME_HOUR = appointSetting.startTimeHour;
   const END_TIME_HOUR = appointSetting.endTimeHour;
   const MINUTE_SELECT = appointSetting.minuteSelect;
 
-  const tabActive = ref(0);
+  // 默认当前日期的 Tab
+  const tabActiveName = ref(dayjs().format("YYYY年M月D日"));
+  const calendarShow = ref(false);
 
   const { appointDate, appointStartTime, appointEndTime, appointRemark, setAppointDate } =
     useAppointInfo();
@@ -75,7 +96,7 @@
    * @description 预约时间范围设置
    */
   function appointTimeFilter(type: string, values: string[]): string[] {
-    const currentDay = dayjs().format("YYYY-MM-D");
+    const currentDay = dayjs().format("YYYY-MM-DD");
 
     if (type === "hour") {
       // 超过最晚结束时间小时则不展示
@@ -96,34 +117,58 @@
     return values;
   }
 
+  const appointDateRange = ref(generateAppointDateRange());
+
   /**
    * @description 生成可预约时间，默认为当前日期至最近 7 天
    */
-  function generateAppointDate(): string[] {
-    const APPOINT_DATE_RANGE = 7;
+  function generateAppointDateRange(
+    startDay: Date = new Date(),
+    num: number = 7
+  ): AppointDateReturn[] {
+    let weekDay = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+    const currentDate = dayjs(startDay);
+    let result: AppointDateReturn[] = [];
 
-    let result: string[] = [];
-
-    for (let index = 0; index <= APPOINT_DATE_RANGE; index++) {
-      result.push(`${getCurrentDate(index)}`);
-    }
-
-    // 当前时间超过每天预约最晚结束时间，则当天不能预约
-    const currentHour = new Date().getHours();
-    if (currentHour >= Number(END_TIME_HOUR)) {
-      result.shift();
+    for (let index = 0; index <= num; index++) {
+      const date = new Date(
+        currentDate.get("year"),
+        currentDate.get("month"),
+        currentDate.get("date") + index
+      );
+      result.push({
+        date: dayjs(date).format("MM.DD"),
+        weekDay: weekDay[date.getDay()],
+        fullDate: dayjs(date).format("YYYY年M月D日"),
+      });
     }
 
     return result;
   }
-</script>
 
-<style scoped lang="scss">
-  .course-banner {
-    width: 100%;
-
-    img {
-      width: 100vw;
-    }
+  /**
+   *
+   * @param date
+   * @description 选择更多日期
+   */
+  function choseAppointDate(date: Date) {
+    appointDate.value = dayjs(date).format("YYYY年M月D日");
+    calendarShow.value = false;
+    // 重置 tab 渲染数据
+    appointDateRange.value = [];
+    nextTick(() => {
+      appointDateRange.value = generateAppointDateRange(date);
+    });
   }
-</style>
+
+  onMounted(() => {
+    loadAppointDetail();
+  });
+
+  const appointDetail = ref<AppointDetail>();
+
+  async function loadAppointDetail() {
+    const appointId = getQueryVariable("appointId");
+    appointDetail.value = await getAppointDetail(Number(appointId));
+  }
+</script>
