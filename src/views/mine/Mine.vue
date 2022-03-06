@@ -1,9 +1,9 @@
 <template>
   <div class="background">
     <!-- 头像及昵称 -->
-    <div>
-      <img class="w-16 rounded-full" src="http://wujieli.top/avatar.jpg" />
-      <div class="mt-2 text-white">点击登录</div>
+    <div class="flex flex-col items-center">
+      <img class="w-16 rounded-full" :src="userAvatar" />
+      <div class="mt-2 text-white">{{ userNickName }}</div>
     </div>
 
     <!-- 基础菜单 -->
@@ -23,48 +23,36 @@
             <span class="font-bold">即将开始</span>
           </template>
         </van-cell>
-        <van-cell title="英文职场面试培训">
-          <template #label>
-            <div>
-              <van-icon name="label-o" />
-              <span> 2022年3月5日</span>
-            </div>
-            <div>
-              <van-icon name="clock-o" />
-              <span> 8:00 - 9:00</span>
-            </div>
-          </template>
-        </van-cell>
-        <van-cell title="初高中英文代写文书及推荐信">
-          <template #label>
-            <div>
-              <van-icon name="label-o" />
-              <span> 2022年3月9日</span>
-            </div>
-            <div>
-              <van-icon name="clock-o" />
-              <span> 13:00 - 15:00</span>
-            </div>
-          </template>
-        </van-cell>
-        <van-cell title="大学本科英文代写文书及推荐信">
-          <template #label>
-            <div>
-              <van-icon name="label-o" />
-              <span> 2022年4月10日</span>
-            </div>
-            <div>
-              <van-icon name="clock-o" />
-              <span> 8:00 - 9:00</span>
-            </div>
-          </template>
-        </van-cell>
+        <template v-for="item in userAppointList" :key="item.relationId">
+          <van-cell :title="item.appointTitle">
+            <template #label>
+              <div>
+                <van-icon name="label-o" />
+                <span>&nbsp;{{ item.appointDate }}</span>
+              </div>
+              <div>
+                <van-icon name="clock-o" />
+                <span>&nbsp;{{ item.startTime }} - {{ item.endTime }}</span>
+              </div>
+              <div v-if="item.appointRemark">
+                <van-icon name="notes-o" />
+                <span>&nbsp;{{ item.appointRemark }}</span>
+              </div>
+            </template>
+          </van-cell>
+        </template>
       </van-cell-group>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import useUserInfo from "./hooks/useUserInfo";
+  import useUserAppoint from "./hooks/useUserAppoint";
+
+  const { userNickName, userAvatar } = useUserInfo();
+  const { userAppointList } = useUserAppoint();
+</script>
 
 <style scoped lang="scss">
   @import "/@/styles/variables.scss";
